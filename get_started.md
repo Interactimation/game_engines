@@ -1,3 +1,7 @@
+---
+layout: default
+---
+
 # Getting Started with Local Inference
 
 We'll be looking at Gemma 4 as our first local inference. There are many versions
