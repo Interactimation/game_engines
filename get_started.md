@@ -1,5 +1,6 @@
 ---
-layout: default
+layout: page
+title: Get Started
 ---
 
 # Getting Started with Local Inference
