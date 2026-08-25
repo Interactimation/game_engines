@@ -9,6 +9,7 @@ layout: default
 ## Table of Contents
 
 [Syllabus](CSC383.f26.Baldridge.Mark)
+
 [Getting started with Local Inference](get_started.md)
 
 
