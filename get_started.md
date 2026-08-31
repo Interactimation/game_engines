@@ -5,11 +5,40 @@ title: Get Started
 
 # Getting Started with Local Inference
 
+First we need our minimal compute:
+
+## Compute Requirements
+
+**Windows**
+
+- Windows 10 or later
+- 8 GB RAM minimum; 16 GB recommended
+- AVX2-capable processor
+- At least 10 GB free storage
+- A GPU is optional, but local inference will be slower without one
+
+**Mac**
+
+- Apple Silicon: M1 or newer
+- macOS 13.6 or later
+- At least 8 GB unified memory
+- At least 10 GB free storage
+- Intel Macs are not supported by Jan
+
+## Getting Jan
+
+Download and install **Jan Desktop** from: https://www.jan.ai/download 
+
+These instructions were written for **Jan Desktop 0.8.4**. Interface details and known problems may differ in other versions.
+
+> **NOTE:** Intel Macs are not supported by Jan. Yu may need to investigate other inference engines. I might suggest [LM Studio](https://lmstudio.ai/)... _I do not know that what follows will be helpful to you_
+
+## Choosing a Model
+
 We'll be looking at Gemma 4 as our first local inference. There are many versions
 
 ## Choosing a Gemma 4 Model
 
-> First: Download and install **Jan Desktop** from: https://www.jan.ai/download
 
 | Windows | Mac |
 |---|---|
@@ -42,13 +71,18 @@ Example:
 
 Avoid **F16/BF16** unless you know you have enough memory. In general, prefer a **larger model at Q4_K_M** over a smaller model at Q8.
 
+> **NOTE:** Choose the main model file. Do not select `mmproj.gguf` or an MTP draft model as the main model.
+
 If Jan does not find the model, search **Hugging Face** for:
 
 `Gemma 4 GGUF`
 
 You can also paste a Hugging Face repository name into **Jan Hub**.
 
-**Rule of thumb:** Run the largest Gemma 4 instruction-tuned GGUF model that fits. If it is too slow, move down one size; if it runs comfortably, try the next size up.
+**Rule of thumb:** Start with the model recommended in the table. Treat Jan’s **Fits** indicator as additional guidance, not a guarantee\
+A model can technically fit while running very slowly or leaving too little memory for a useful context window.
+
+
 
 ## Setting up a Project in Jan
 
@@ -108,17 +142,44 @@ You can also paste a Hugging Face repository name into **Jan Hub**.
 * **Project** — a workspace containing related conversations, one assigned Assistant, and shared Project Files 
 * **Project Files** — documents indexed for retrieval across the Project 
 
-**Important distinction:** you do not really "apply a model to a Project". You **assign an Assistant to the Project** and **select a model for the chat**. The Assistant supplies the behavior; the model supplies the intelligence 
+**Important distinction:** you do not really "apply a model to a Project". You **assign an Assistant to the Project** and **select a model for the chat**. The Assistant supplies the behavior; the model supplies the intelligence
 
-## Tutorial Assignment 1
+
+
+## Tutorial Assignment 1: Get Response
 
 One of the things I need to gauge at the top of the semester is how much instruction is needed —how much your own exploration, so consider this a test of self-instruction:
  
-* Create a project for _Learning Local Inference_
-* Chat with your local inference to learn how to give it access to a specific folder on your computer (created just for this) 
-* Ask it to write a Markdown doc to that folder, explaining the process you went through to create the doc.
+* With the model loaded open a chat: prompt with: what is meant by "local inference"?
 
-> Due Monday, when we will see how everyone managed! This will set a bar for how much in-class vs. self-instruction the course can handle...
+**If something fails, record complete error message**
 
+## Tutorial Assignment 2: Write to Folder
 
+1. Create a folder named `JanFiles` on your device and record its full path
 
+> **NOTE:** - Windows: Right-click the folder and select Copy as path\
+Mac: Select the folder in Finder and press Option + Command + C
+
+2. Open **Jan → Settings → MCP Servers → Filesystem MCP**.
+
+   - Enable the Filesystem MCP.
+   - Add `JanFiles` as an allowed folder.
+   - Save the configuration.
+   - Approve any operating-system permission request.
+
+3. Open a new conversation and prompt:
+
+   ```text
+   Using the Filesystem MCP, create a file named hello-world.md in this authorized folder: [FULL FOLDER PATH]
+
+   Write exactly: # Hello, World!
+
+   This Markdown file was created by my local model in Jan.
+
+   Do not write anywhere else. Tell me the complete path of the file you created.
+   ```
+
+5. Check the proposed tool action and approve it. Open `hello-world.md` from the folder and confirm that its contents are correct.
+
+> You are authorizing the **Filesystem MCP**, not giving the model unrestricted access to your computer. The model should be able to write only within folders allowed through the Filesystem MCP.
