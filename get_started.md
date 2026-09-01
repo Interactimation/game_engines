@@ -5,9 +5,28 @@ title: Get Started
 
 # Getting Started with Local Inference
 
+Local inference is the process of running an AI model directly on your own device or local hardware instead of using a remote cloud server
+
+## Advantages
+
+**Privacy:** your interactions with your model(s) never leave your device
+
+**Ecological:** Only the resources you generally use to run your device —for emails and catpix— are used to run your models
+
+**Cost:** We'll use only free, open weight (the closest equivalent in AI to "open source") models under Apache 2.0 (or equivalent) license, such that you can develop commercial projects that package the model and _not owe a cent_
+
+**Fun/Learning:** Learning is fun and having a pet AI can be useful!
+
+> **CONSIDER:** Be kind to your pet! The model may not have any interiority (no soul) but YOU have one and being unkind _is bad for you_
+
+**Ethically:** Well, the Large Language Model (LLM) _was_ trained on _every book ever written,_ etc. — and _without permission!_\
+So there, you're _on your own!_
+
+## Technology Needed
+
 First we need our minimal [compute](https://thenewcuriosityshop.substack.com/p/calm-down-wordbros-compute-works):
 
-## Compute Requirements
+### Compute Requirements
 
 **Windows**
 
@@ -25,39 +44,42 @@ First we need our minimal [compute](https://thenewcuriosityshop.substack.com/p/c
 - At least 10 GB free storage
 - Intel Macs are not supported by Jan
 
-## Getting Jan
+## Install your Inference Engine
 
-Download and install **Jan Desktop** from: https://www.jan.ai/download 
+An _inference engine_ is a software environment for running your AI models\
+There are a number of these but I've chosen Jan.ai for ease of use and its hybrid functionality: allowing us to chat with our onboard models _AND_ cloud-based chatbots!
+
+### Get Jan
+Download and install **Jan Desktop** from: https://www.jan.ai/download
 
 These instructions were written for **Jan Desktop 0.8.4**. Interface details and known problems may differ in other versions.
 
 > **NOTE:** Intel Macs are not supported by Jan. Yu may need to investigate other inference engines. I might suggest [LM Studio](https://lmstudio.ai/)... _I do not know that what follows will be helpful to you_
 
-## Choosing a Model
+### Choose a Model
 
-We'll be looking at Gemma 4 as our first local inference. There are many versions
+We'll be looking at Gemma 4 (a recent Google product) as our first local inference — there are many versions to choose from!
 
-## Choosing a Gemma 4 Model
-
+### Depending on Windows or Mac:
 
 | Windows | Mac |
 |---|---|
 | **Find RAM:** Press **Ctrl + Shift + Esc → Performance → Memory**. Record total installed RAM. | **Find RAM:** Open **Apple menu → About This Mac**. Record the **Memory** amount. |
 | **Find VRAM:** In **Task Manager → Performance**, select the NVIDIA or AMD **GPU** and note **Dedicated GPU memory**. `2.1 / 8.0 GB` means 8 GB VRAM. | **Apple Silicon:** CPU and GPU share **unified memory**, so there is no separate VRAM figure. Use total memory. |
-| With integrated Intel/AMD graphics, base your choice mainly on RAM. Do not count **Shared GPU Memory** as extra RAM. | **Intel Mac with discrete GPU:** Jan may not be unsupported. Speakt to me about other inference engines Check **System Information → Graphics/Displays** for VRAM. |
+| With integrated Intel/AMD graphics, base your choice mainly on RAM. Do not count **Shared GPU Memory** as extra RAM. | **Intel Mac with discrete GPU:** Jan is unsupported. Speak to me about other inference engines. Check **System Information → Graphics/Displays** for VRAM. |
 | **8 GB RAM:** Gemma 4 **E2B IT – Q4_K_M** | **8 GB:** Gemma 4 **E2B IT – Q4_K_M** |
 | **16 GB RAM:** Gemma 4 **E4B IT – Q4_K_M** | **16 GB:** Gemma 4 **E4B IT – Q4_K_M** |
 | **32 GB RAM / 8+ GB VRAM:** Gemma 4 **12B IT – Q4_K_M** | **24–32 GB:** Gemma 4 **12B IT – Q4_K_M** |
 | **32–64 GB RAM / 16+ GB VRAM:** Gemma 4 **26B-A4B IT – Q4_K_M** | **48–64 GB:** Gemma 4 **26B-A4B IT – Q4_K_M** |
 | **64 GB RAM / 20–24+ GB VRAM:** Gemma 4 **31B IT – Q4** | **64+ GB:** Gemma 4 **31B IT – Q4** |
 
-### For Both
+### Both Widows and Mac
 
 Open **Jan → Hub** and search for:
 
 `Gemma 4`
 
-Jan may mark models **Fits**, **May be slow**, or **Won't fit**. Start with the largest model marked **Fits**.
+Jan automatically detects your computer’s memory and describes each model as **Fits**, **May be slow**, or **Won't fit**. Start with the largest model marked **Fits**.
 
 Look for:
 
@@ -69,117 +91,58 @@ Example:
 
 `gemma-4-12B-it-Q4_K_M.gguf`
 
-Avoid **F16/BF16** unless you know you have enough memory. In general, prefer a **larger model at Q4_K_M** over a smaller model at Q8.
+In general, prefer a **larger model at Q4_K_M** over a smaller model at Q8.
 
 > **NOTE:** Choose the main model file. Do not select `mmproj.gguf` or an MTP draft model as the main model.
 
-If Jan does not find the model, search **Hugging Face** for:
+YOu can also find a model's full ID on [Hugging Face](https://huggingface.co/models) then paste that ID into Jan’s Hub search bar
 
-`Gemma 4 GGUF`
-
-You can also paste a Hugging Face repository name into **Jan Hub**.
-
-**Rule of thumb:** Start with the model recommended in the table. Treat Jan’s **Fits** indicator as additional guidance, not a guarantee\
+> **RULE OF THUMB:** Start with the model recommended in the table\
+Treat Jan’s **Fits** indicator as additional guidance, not a guarantee\
 A model can technically fit while running very slowly or leaving too little memory for a useful context window.
 
+## Now we Test our Model
 
+* Click New Chat
+* In the upper left, select the model you chose
+* In the chat field (it probably says something like "ask me anything" or "how can I help you") type: `Say "Hello"`
 
-## Setting up a Project in Jan
+The model should think for a moment and output a Hello message
 
-### Jan: Create a Project
+> **CONGRATS!** You're up and running! (Otherwise, see [TROUBLESHOOT](#trouble01), below)
 
-* If you haven't already:
+## Things to Know
+* Each chat has a limited "context" and it may be fairly small
+* The model won't remember anything from one chat to another
 
-1. **Install the model**
+For this reason, if you find you're always running out of context before you finish a task, you may want to
 
-   * Open **Hub**
-   * Search for the model you want 
-   * Choose a version that fits the computer and click **Download** 
-   * Jan local models normally use **GGUF** through llama.cpp 
+[Raise the Context Limit](raise_context.md)
 
-* In Jan:
+It's also possible to:
 
-2. **Create an Assistant**
+[Give the Model a Memory](todo.md)
+//// But that's in the TODO pile for now
 
-   * Go to **Settings → Assistants** 
-   * Click **+** 
-   * Give the Assistant a descriptive name — _Suggest "Learning Assistant" or similar_  
-   * Add its **Instructions**: persistent rules describing its role, expertise, preferences, and behavior — _I may be able to supply a first set of Instructions. If not, suggest querying ChatGPT or Claude for a set of instructions fit for the model, and the project. Be specific with your chatbot. You might go back and forth with this external advice, fine-tuning this set of instructions over time. Eventually We hope to get an idea of what works for the model!_ 
-   * Save 
+## Next Steps
 
-3. **Create the Project**
+* [Enable Web Access for your Model](enable.md#enable-web-access)
+* [Enable the Model to "Fetch" Content from the Web](enable.md#enable-fetch)
+* [Permit your Model to Read from and Write to a Specific Folder on your Device](enable.md#enable-read--write)
 
-   * Click **New Project** in the left sidebar 
-   * Name the Project — _Suggest "Learning Local Inference"_ or similar
-    * Our first Project might be just learning to use the systems we're putting in place 
-   * Assign the Assistant you just created 
-   * The Assistant's instructions will apply to conversations in that Project 
+In Jan we can
 
-4. **Select the model**
+* [Create a project](project_assistant.md#create-a-project)
+* [Create an assistant](project_assistant.md#)
 
-   * Open a conversation in the Project 
-   * Use the **model selector** in the chat interface 
-   * Select your downloaded model 
-   * If necessary, use the gear beside the model to adjust **Context Size**, **GPU Layers**, or other inference settings 
+------
 
-5. **Add Project files**
+<a id="trouble01"></a>
+> **TROUBLESHOOT**\
+_IN GENERAL:_ Copy error messages and paste them into your favorite online chatbot. Be specific: tell it what you were doing and trying to do
 
-   * In the Project's **Files** panel, click **Add** 
-   * Add Markdown, PDF, DOCX, code, or other reference files — _Suggest any file at all, for now, I may supply you with or we may find docs later._
-   * Jan chunks and indexes these as **Project Files**, making them available across conversations in that Project 
+If the model simply never responds to your "hello" prompt (never stops "thinking") it's possible you have installed too large a model —you might try a smaller one as Jan's recommendations have been known to be... optimistic
 
-6. **Start a new conversation**
+### If Needed: How to Uninstall a Model
 
-   * Confirm the correct **Assistant** and **model** are active 
-   * Begin chatting 
-   * New conversations in the Project share the Project's Assistant and Project Files 
-
-### Vocabulary
-
-* **Model** — the LLM doing the inference: Gemma, Qwen, etc 
-* **Assistant** — persistent instructions/configuration that tell a model how to behave 
-* **Instructions** — the Assistant's standing system-level directions 
-* **Project** — a workspace containing related conversations, one assigned Assistant, and shared Project Files 
-* **Project Files** — documents indexed for retrieval across the Project 
-
-**Important distinction:** you do not really "apply a model to a Project". You **assign an Assistant to the Project** and **select a model for the chat**. The Assistant supplies the behavior; the model supplies the intelligence
-
-
-
-## Tutorial Assignment 1: Get Response
-
-One of the things I need to gauge at the top of the semester is how much instruction is needed —how much your own exploration, so consider this a test of self-instruction:
- 
-* With the model loaded open a chat: prompt with: what is meant by "local inference"?
-
-**If something fails, record complete error message**
-
-## Tutorial Assignment 2: Write to Folder
-
-1. Create a folder named `JanFiles` on your device and record its full path
-
-> **NOTE:** - Windows: Right-click the folder and select Copy as path\
-Mac: Select the folder in Finder and press Option + Command + C
-
-2. Open **Jan → Settings → MCP Servers → Filesystem MCP**.
-
-   - Enable the Filesystem MCP.
-   - Add `JanFiles` as an allowed folder.
-   - Save the configuration.
-   - Approve any operating-system permission request.
-
-3. Open a new conversation and prompt:
-
-   ```text
-   Using the Filesystem MCP, create a file named hello-world.md in this authorized folder: [FULL FOLDER PATH]
-
-   Write exactly: # Hello, World!
-
-   This Markdown file was created by my local model in Jan.
-
-   Do not write anywhere else. Tell me the complete path of the file you created.
-   ```
-
-5. Check the proposed tool action and approve it. Open `hello-world.md` from the folder and confirm that its contents are correct.
-
-> You are authorizing the **Filesystem MCP**, not giving the model unrestricted access to your computer. The model should be able to write only within folders allowed through the Filesystem MCP.
+Click Hub and find the model you installed (mine appears in the list with a "New CHat" button) if clicking the name of the model shows you a trashcan icon, clicking it will delete the model —if not, click Settings and, under Model Providers, below LLama.cpp, you may see another provider. Click that and you should find your model and its trashcan icon
