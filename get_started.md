@@ -5,7 +5,7 @@ title: Get Started
 
 # Getting Started with Local Inference
 
-First we need our minimal compute:
+First we need our minimal [compute](https://thenewcuriosityshop.substack.com/p/calm-down-wordbros-compute-works):
 
 ## Compute Requirements
 
