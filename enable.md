@@ -1,3 +1,8 @@
+---
+layout: page
+title: Enable Functions
+---
+
 # Enable Functionality
 
 Jan has settings which can enable it to 

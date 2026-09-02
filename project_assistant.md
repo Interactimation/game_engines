@@ -1,3 +1,8 @@
+---
+layout: page
+title: Projects / Assistants
+---
+
 # Projects and Assistants
 
 Projects are where we can organize our work

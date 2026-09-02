@@ -1,3 +1,8 @@
+---
+layout: page
+title: Raise Context
+---
+
 # Raise the Context Size in Jan 0.8.4
 
 1. Open **Settings → Model Providers**.

@@ -1,3 +1,8 @@
+---
+layout: page
+title: Context Limits
+---
+
 # Context Limits
 
 Like most things in the computing world, there is a preference for [_powers of 2_](https://medium.com/@amoljadhav_48655/the-power-of-2-in-computer-science-fundamentals-79c69d1d950a)
