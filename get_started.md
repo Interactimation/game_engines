@@ -38,11 +38,10 @@ First we need our minimal [compute](https://thenewcuriosityshop.substack.com/p/c
 
 **Mac**
 
-- Apple Silicon: M1 or newer
+- Apple Silicon: M1 or newer (Intel is unsupported by Jan)
 - macOS 13.6 or later
 - At least 8 GB unified memory
 - At least 10 GB free storage
-- Intel Macs are not supported by Jan
 
 ## Install your Inference Engine
 
@@ -58,14 +57,22 @@ These instructions were written for **Jan Desktop 0.8.4**. Interface details and
 
 ### Choose a Model
 
-We'll be looking at Gemma 4 (a recent Google product) as our first local inference — there are many versions to choose from!
+We'll be looking at Gemma 4 (a recent Google product) as our first local inference — there are many sizes to choose from!
+
+Maybe the first thing to do is:
+
+#### Consult Jan
+
+* Under Settings choose Hardware
+* Note the RAM and VRAM it identifies for your device
+
+> **NOTE:** Apple Silicon CPU and GPU share _unified memory_, so there is no separate VRAM figure. Use total memory.
 
 ### Depending on Windows or Mac:
 
 | Windows | Mac |
 |---|---|
-| **Find RAM:** Press **Ctrl + Shift + Esc → Performance → Memory**. Record total installed RAM. | **Find RAM:** Open **Apple menu → About This Mac**. Record the **Memory** amount. |
-| **Find VRAM:** In **Task Manager → Performance**, select the NVIDIA or AMD **GPU** and note **Dedicated GPU memory**. `2.1 / 8.0 GB` means 8 GB VRAM. | **Apple Silicon:** CPU and GPU share **unified memory**, so there is no separate VRAM figure. Use total memory. |
+| 
 | With integrated Intel/AMD graphics, base your choice mainly on RAM. Do not count **Shared GPU Memory** as extra RAM. | **Intel Mac with discrete GPU:** Jan is unsupported. Speak to me about other inference engines. Check **System Information → Graphics/Displays** for VRAM. |
 | **8 GB RAM:** Gemma 4 **E2B IT – Q4_K_M** | **8 GB:** Gemma 4 **E2B IT – Q4_K_M** |
 | **16 GB RAM:** Gemma 4 **E4B IT – Q4_K_M** | **16 GB:** Gemma 4 **E4B IT – Q4_K_M** |
@@ -79,7 +86,7 @@ Open **Jan → Hub** and search for:
 
 `Gemma 4`
 
-Jan automatically detects your computer’s memory and describes each model as **Fits**, **May be slow**, or **Won't fit**. Start with the largest model marked **Fits**.
+Based on Jan's analysis of your computer’s memory it describes each model as **Fits**, **May be slow**, or **Won't fit**. Start with the largest model marked **Fits**.
 
 Look for:
 

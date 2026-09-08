@@ -12,4 +12,15 @@ layout: default
 
 [Getting started with Local Inference](get_started.md)
 
+Sub Heads
+
+* [Adjust the Context Size](aise_context.md)
+* [Enable Web Access for your Model](enable.md#enable-web-access)
+* [Enable the Model to "Fetch" Content from the Web](enable.md#enable-fetch)
+* [Permit your Model to Read from and Write to a Specific Folder on your Device](enable.md#enable-read--write)
+* [Create a project](project_assistant.md#create-a-project)
+* [Create an assistant](project_assistant.md#)
+
+
+
 
