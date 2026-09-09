@@ -9,14 +9,16 @@ main {
   max-width: 2000px;
 }
 
-/* proper indentation for lists */
-main ul,
-main ol {
+/* indent lists */
+ul,
+ol {
   padding-left: 2em;
 }
 
-/* nested lists */
-main li > ul,
-main li > ol {
+/* indent nested lists */
+ul ul,
+ul ol,
+ol ul,
+ol ol {
   padding-left: 2em;
 }
