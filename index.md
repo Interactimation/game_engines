@@ -12,7 +12,7 @@ layout: default
 
 [Getting started with Local Inference](get_started.md)
 
-### Sub Heads
+### Subheads
 
 * [Adjust the Context Size](aise_context.md)  
 * [Enable Web Access for your Model](enable.md#enable-web-access)
