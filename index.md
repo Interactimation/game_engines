@@ -21,6 +21,7 @@ layout: default
 * [Create a project](project_assistant.md#create-a-project)
 * [Create an assistant](project_assistant.md#)
 
+## [Babylon.js](babylon.md)
 
 
 
