@@ -12,7 +12,7 @@ layout: default
 
 [Getting started with Local Inference](get_started.md)
 
-### Subheads
+### Next Steps
 
 * [Adjust the Context Size](aise_context.md)  
 * [Enable Web Access for your Model](enable.md#enable-web-access)
@@ -21,7 +21,9 @@ layout: default
 * [Create a project](project_assistant.md#create-a-project)
 * [Create an assistant](project_assistant.md#)
 
-## [Babylon.js](babylon.md)
+## Babylon.js
+
+[Babylon.js](babylon.md)
 
 
 
