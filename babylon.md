@@ -1,3 +1,9 @@
+---
+layout: page
+title: Babylon
+---
+
+
 # Babylon.js
 
 ## Editor Choices
