@@ -1,45 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>ArenaRoids02</title>
-
-  <style>
-    html,
-    body {
-      width: 100%;
-      height: 100%;
-      margin: 0;
-      overflow: hidden;
-    }
-
-    #renderCanvas {
-      width: 100%;
-      height: 100%;
-      display: block;
-    }
-  </style>
-
-    <!-- Babylon.js -->
-  <script src="https://cdn.babylonjs.com/babylon.js"></script>
-
-  <!-- Babylon.js Loaders -->
- <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
-
-  <!-- Babylon.js GUI -->
-  <script src="https://cdn.babylonjs.com/gui/babylon.gui.min.js"></script>
-  
+    <meta charset="UTF-8">
+    <title>Babylon.js Asteroid Sphere</title>
+    <!-- Include Babylon.js Core, Loaders, and GUI from CDN -->
+    <script src="https://cdn.babylonjs.com/babylon.js"></script>
+    <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
+    <script src="https://cdn.babylonjs.com/gui/babylon.gui.min.js"></script>
+    <style>
+        html, body { overflow: hidden; width: 100%; height: 100%; margin: 0; padding: 0; background-color: #000; }
+        #renderCanvas { width: 100%; height: 100%; touch-action: none; }
+    </style>
 </head>
-
 <body>
-
-  <canvas id="renderCanvas"></canvas>
-
-
-
-      <script>
+    <canvas id="renderCanvas"></canvas>
+    <script>
         const canvas = document.getElementById("renderCanvas");
         const engine = new BABYLON.Engine(canvas, true);
         // ==========================================
@@ -65,8 +40,9 @@
             // 2. THE CAMERA (POV at center)
             const camera = new BABYLON.FreeCamera("camera", new BABYLON.Vector3(0, 0, 0), scene);
             camera.attachControl(canvas, true);
-            // Allow looking around with mouse/touch
-            camera.keysUp.length = 0; // Disable WASD movement to keep POV fixed at center
+            
+            // Allow looking around with mouse/touch (Disable WASD movement to keep POV fixed at center)
+            camera.keysUp.length = 0; 
             camera.keysDown.length = 0;
             camera.keysLeft.length = 0;
             camera.keysRight.length = 0;
@@ -93,7 +69,7 @@
                     this.mesh.position.y = dist * Math.sin(phi) * Math.sin(theta);
                     this.mesh.position.z = dist * Math.cos(phi);
                     // Velocity: Randomized direction and speed
-                    const direction = this.mesh.position.normalize();
+                    const direction = this.mesh.position.clone().normalize();
                     const randomDir = direction.add(new BABYLON.Vector3(
                         (Math.random() - 0.5), 
                         (Math.random() - 0.5), 
@@ -101,7 +77,7 @@
                     )).normalize();
                     // Apply the user-defined BASE_SPEED
                     const initialSpeed = (Math.random() * 2 + 1) * BASE_SPEED;
-                    this.velocity = direction.scale(initialSpeed);
+                    this.velocity = randomDir.scale(initialSpeed);
                 }
                 update() {
                     // Move asteroid
@@ -110,7 +86,7 @@
                     const distanceFromCenter = this.mesh.position.length();
                     if (distanceFromCenter > (shellRadius - this.radius)) {
                         // 1. Find the normal of the collision (points from center to asteroid)
-                        const normal = this.mesh.position.normalize();
+                        const normal = this.mesh.position.clone().normalize();
                         // 2. Reflect velocity: V_new = V - 2(V dot N) * N
                         const dot = BABYLON.Vector3.Dot(this.velocity, normal);
                         this.velocity.subtractInPlace(normal.scale(2 * dot));
@@ -133,6 +109,7 @@
                     for (let j = i + 1; j < asteroids.length; j++) {
                         const a = asteroids[i];
                         const b = asteroids[j];
+                        
                         const distVec = a.mesh.position.subtract(b.mesh.position);
                         const distance = distVec.length();
                         const minDistance = a.radius + b.radius;
@@ -140,19 +117,17 @@
                             // Collision detected! 
                             const normal = distVec.normalize();
                             // Simple Elastic Collision response
-                            // Relative velocity
                             const relativeVelocity = a.velocity.subtract(b.velocity);
                             const velocityAlongNormal = BABYLON.Vector3.Dot(relativeVelocity, normal);
                             // Do not resolve if velocities are already separating
                             if (velocityAlongNormal > 0) continue;
-                            // Impulse scalar (assuming equal mass for simplicity based on size/volume is complex, 
-                            // so we'll treat them as having similar bounce properties)
-                            const impulse = (2 * velocityAlongNormal) / 2; // dividing by count of objects involved
+                            // Impulse calculation
+                            const impulse = (2 * velocityAlongNormal) / 2; 
                             const impulseVec = normal.scale(impulse);
+                            // Apply to both objects (Equal and opposite reaction)
                             a.velocity.subtractInPlace(impulseVec);
-  // Complete velocity change for object B (equal and opposite reaction)
                             b.velocity.addInPlace(impulseVec);
-                            // 4. Positional correction: Move asteroids apart so they don't get stuck inside each other
+                            // Positional correction: Move asteroids apart so they don't get stuck inside each other
                             const overlap = minDistance - distance;
                             const separationVec = normal.scale(overlap / 2);
                             a.mesh.position.addInPlace(separationVec);
@@ -163,13 +138,13 @@
             };
             // Register the update loop to run every frame
             scene.registerBeforeRender(() => {
-                resolveAsteroidCollisions(); // Check for asteroid vs asteroid
-                asteroids.forEach(asteroid => asteroid.update()); // Move and check shell collisions
+                resolveAsteroidCollisions(); 
+                asteroids.forEach(asteroid => asteroid.update()); 
             });
             return scene;
         };
-        // Start the engine
-        createScene();
+        // Start the engine and render loop
+        const scene = createScene();
         engine.runRenderLoop(() => {
             scene.render();
         });
