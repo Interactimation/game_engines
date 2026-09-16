@@ -1,0 +1,139 @@
+    <script>
+        const canvas = document.getElementById("renderCanvas");
+        const engine = new BABYLON.Engine(canvas, true);
+        // ==========================================
+        // USER EDITABLE VARIABLES
+        // ==========================================
+        const BASE_SPEED = 0.1;      // Initial speed multiplier for asteroids
+        const SPEED_INC = 0.02;      // How much speed is added when hitting the outer shell
+        const ASTEROID_COUNT = 40;   // Number of asteroids to spawn
+        // ==========================================
+        const createScene = function () {
+            const scene = new BABYLON.Scene(engine);
+            scene.clearColor = new BABYLON.Color3(0, 0, 0);
+            // 1. THE BIG SPHERE (The Shell)
+            // Diameter 100m -> Radius 50m
+            const shellRadius = 50;
+            const shell = BABYLON.MeshBuilder.CreateSphere("shell", { diameter: 100, segments: 32 }, scene);
+            
+            // To see the INSIDE of a sphere in Babylon, we must flip the normals
+            shell.material = new BABYLON.StandardMaterial("shellMat", scene);
+            shell.material.diffuseColor = new BABYLON.Color3(0, 0, 0.2); // Dark Blue
+            shell.material.specularColor = new BABYLON.Color3(0, 0, 0);
+            shell.material.sideOrientation = BABYLON.MeshSideOrientation.BACKSIDE;
+            // 2. THE CAMERA (POV at center)
+            const camera = new BABYLON.FreeCamera("camera", new BABYLON.Vector3(0, 0, 0), scene);
+            camera.attachControl(canvas, true);
+            // Allow looking around with mouse/touch
+            camera.keysUp.length = 0; // Disable WASD movement to keep POV fixed at center
+            camera.keysDown.length = 0;
+            camera.keysLeft.length = 0;
+            camera.keysRight.length = 0;
+            // 3. ASTEROID LOGIC
+            const asteroids = [];
+            class Asteroid {
+                constructor() {
+                    // Random diameter between 0.5 and 5
+                    this.radius = Math.random() * (5 - 0.5) + 0.5;
+                    
+                    // Create Mesh
+                    this.mesh = BABYLON.MeshBuilder.CreateSphere("asteroid", { diameter: this.radius * 2 }, scene);
+                    this.mesh.material = new BABYLON.StandardMaterial("astMat", scene);
+                    this.mesh.material.diffuseColor = new BABYLON.Color3(Math.random(), Math.random(), Math.random());
+                    // Position: Near perimeter but inside (dist from center < shellRadius - asteroidRadius)
+                    const maxDist = shellRadius - this.radius - 2; // -2 for a little buffer
+                    const dist = Math.random() * maxDist + (maxDist * 0.7); // Focus spawning near outer edge
+                    
+                    // Generate random point on a sphere surface at 'dist' distance
+                    const theta = Math.random() * Math.PI * 2;
+                    const phi = Math.acos((Math.random() * 2) - 1);
+                    
+                    this.mesh.position.x = dist * Math.sin(phi) * Math.cos(theta);
+                    this.mesh.position.y = dist * Math.sin(phi) * Math.sin(theta);
+                    this.mesh.position.z = dist * Math.cos(phi);
+                    // Velocity: Randomized direction and speed
+                    const direction = this.mesh.position.normalize();
+                    const randomDir = direction.add(new BABYLON.Vector3(
+                        (Math.random() - 0.5), 
+                        (Math.random() - 0.5), 
+                        (Math.random() - 0.5)
+                    )).normalize();
+                    // Apply the user-defined BASE_SPEED
+                    const initialSpeed = (Math.random() * 2 + 1) * BASE_SPEED;
+                    this.velocity = direction.scale(initialSpeed);
+                }
+                update() {
+                    // Move asteroid
+                    this.mesh.position.addInPlace(this.velocity);
+                    // --- COLLISION: INNER SHELL ---
+                    const distanceFromCenter = this.mesh.position.length();
+                    if (distanceFromCenter > (shellRadius - this.radius)) {
+                        // 1. Find the normal of the collision (points from center to asteroid)
+                        const normal = this.mesh.position.normalize();
+                        // 2. Reflect velocity: V_new = V - 2(V dot N) * N
+                        const dot = BABYLON.Vector3.Dot(this.velocity, normal);
+                        this.velocity.subtractInPlace(normal.scale(2 * dot));
+                        // 3. Apply user-defined SPEED_INC (Randomized increment)
+                        const inc = SPEED_INC * (Math.random() + 0.5);
+                        this.velocity.scaleInPlace(1 + inc);
+                        // 4. Prevent clipping: Push asteroid back inside the shell boundary immediately
+                        const overlap = distanceFromCenter - (shellRadius - this.radius);
+                        this.mesh.position.subtractInPlace(normal.scale(overlap));
+                    }
+                }
+            }
+            // Initialize Asteroids
+            for (let i = 0; i < ASTEROID_COUNT; i++) {
+                asteroids.push(new Asteroid());
+            }
+            // --- COLLISION: ASTEROID vs ASTEROID ---
+            const resolveAsteroidCollisions = () => {
+                for (let i = 0; i < asteroids.length; i++) {
+                    for (let j = i + 1; j < asteroids.length; j++) {
+                        const a = asteroids[i];
+                        const b = asteroids[j];
+                        const distVec = a.mesh.position.subtract(b.mesh.position);
+                        const distance = distVec.length();
+                        const minDistance = a.radius + b.radius;
+                        if (distance < minDistance) {
+                            // Collision detected! 
+                            const normal = distVec.normalize();
+                            // Simple Elastic Collision response
+                            // Relative velocity
+                            const relativeVelocity = a.velocity.subtract(b.velocity);
+                            const velocityAlongNormal = BABYLON.Vector3.Dot(relativeVelocity, normal);
+                            // Do not resolve if velocities are already separating
+                            if (velocityAlongNormal > 0) continue;
+                            // Impulse scalar (assuming equal mass for simplicity based on size/volume is complex, 
+                            // so we'll treat them as having similar bounce properties)
+                            const impulse = (2 * velocityAlongNormal) / 2; // dividing by count of objects involved
+                            const impulseVec = normal.scale(impulse);
+                            a.velocity.subtractInPlace(impulseVec);
+  // Complete velocity change for object B (equal and opposite reaction)
+                            b.velocity.addInPlace(impulseVec);
+                            // 4. Positional correction: Move asteroids apart so they don't get stuck inside each other
+                            const overlap = minDistance - distance;
+                            const separationVec = normal.scale(overlap / 2);
+                            a.mesh.position.addInPlace(separationVec);
+                            b.mesh.position.subtractInPlace(separationVec);
+                        }
+                    }
+                }
+            };
+            // Register the update loop to run every frame
+            scene.registerBeforeRender(() => {
+                resolveAsteroidCollisions(); // Check for asteroid vs asteroid
+                asteroids.forEach(asteroid => asteroid.update()); // Move and check shell collisions
+            });
+            return scene;
+        };
+        // Start the engine
+        createScene();
+        engine.runRenderLoop(() => {
+            scene.render();
+        });
+        // Handle window resizing
+        window.addEventListener("resize", () => {
+            engine.resize();
+        });
+    </script>
