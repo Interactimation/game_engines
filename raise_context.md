@@ -7,7 +7,7 @@ title: Raise Context
 
 1. Open **Settings → Model Providers**.
 2. Find your Gemma model and **Stop** it.
-3. Click the **gear icon** beside the model.
+3. In a chat, click the **gear icon** beside the model.
 4. Turn **Fit to Hardware** (if you see it) **off**.
 5. Turn **Speculative Decoding OR MTP** **off**.
 6. Set **Context Size** to [**the next highest limit**](powers_2.md).
@@ -15,7 +15,7 @@ title: Raise Context
 
 > Do not change the context while the model is running. Jan may otherwise continue using the old value—or silently reduce it. The MTP setting can also trigger a model-loading error in Jan 0.8.4.
 
-A larger context uses more RAM/VRAM. If the model will not load, reduce **Context Size** to **8192**.
+A larger context uses more RAM/VRAM. If the model will not load, reduce **Context Size**.
 
 ## Check the Context Size
 
