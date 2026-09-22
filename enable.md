@@ -30,9 +30,11 @@ Jan has settings which can enable it to
     * **Mac:** Select the folder in Finder and press Option + Command + C
 * In Jan, Click Settings
 * Under INTEGRATIONS, click MCP Servers
-* Find Filesystem —_before turning it on_, use the pencil icon to edit it
+* Find Filesystem —**_before turning it on_, use the pencil icon to edit it**
 * Under arguments you may find something that looks like a dummy of your folder path —replace it with your folder path (if you don't see anything like that, click the + sign beside Arguments and paste your path into the new field)
 * Turn on Filesystem
+
+> **ERRORS:** Are most likely if you failed to paste the path to your permitted folder into Arguments or if you do not have [Node.js](https://nodejs.org/en/download) installed
 
 ## Test All the Above
 
