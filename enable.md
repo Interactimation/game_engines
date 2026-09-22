@@ -34,7 +34,7 @@ Jan has settings which can enable it to
 * Under arguments you may find something that looks like a dummy of your folder path —replace it with your folder path (if you don't see anything like that, click the + sign beside Arguments and paste your path into the new field)
 * Turn on Filesystem
 
-> **ERRORS:** Are most likely if you failed to paste the path to your permitted folder into Arguments or if you do not have [Node.js](https://nodejs.org/en/download) installed
+> **ERRORS:** Are most likely if you failed to paste the path to your permitted folder into Arguments or if you do not have [Node.js](https://nodejs.org/en/download) installed —IF ERRORS PERSIST, contact me!
 
 ## Test All the Above
 
