@@ -58,3 +58,18 @@ VIEWER\
 `<script src="https://cdn.babylonjs.com/viewer/babylon.viewer.js"></script>`
 
 > **NOTE:** Babylon officially says these CDN URLs are intended for learning and small experiments, not production deployment. For a class project and GitHub Pages exercises, they're very convenient; for a finished public application, Babylon recommends the ES6 @babylonjs/core packages instead.
+
+
+## Example Code
+
+I tried this prompt:
+
+```
+I'm creating a game in Babylon.js, running on the web. I've included src urls for the Core, Loaders and GUI. 
+I want to create a dark blue sphere 100 meters in diameter with my POV at the center, I should be able to turn in any direction using mouse position. 
+Near the perimeter, within the sphere, I want to randomly generate smaller spheres called asteroids, radii randomized between 0.5 meters and 2.5 meters (always appearing within the sphere but at a distance from it greater than their radius) moving in randomized directions and initially slow randomized speeds. (Create a discreet "speed" variable to be randomized so I can change it in the code to my liking). 
+Asteroids should collide with and rebound from each other, as well as the inner surface of the sphere, but the sphere should add a small, randomized increment to the speed of each asteroid. (Create another discreet "inc" variable to randomize and add this increment, so I can also edit this in the code.
+
+> Write this html page to to your permitted folder autonomousSite. Name the file arenaRoids.html
+```
+And I got [this code](arenaRoids.zip)
